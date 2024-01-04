@@ -1,0 +1,84 @@
+1.git commit时出现
+                # Please enter the commit message for your changes. Lines starting
+
+                # with '#' will be ignored, and an empty message aborts the commit.
+
+                #
+
+                # On branch master
+
+                # Your branch is up to date with 'origin/master'.
+
+    这是因为git commit提交的时候，没有输入提交说明导致的。
+
+    当前界面输入：wq，回车，即可退出该页面
+
+    注意是冒号+wq（wq要小写）
+	
+	退出后重新提交，git commit -m 后面添加上代码提交说明即可
+
+    git commit -m "代码提交说明"---代码提交说明可以任意写。
+
+    
+	再回车就可以正常提交，不会报错了。
+2.Git操作 fatal: bad numeric config value ‘“false”‘ for ‘http.sslverify‘: invalid unit错误
+    找到C:\Users\wang(自己电脑的名)下找到 .gitconfig
+	
+	删掉sslverify=“false"    保持
+	
+3.解决GitHub不能访问的几个办法
+   https://blog.csdn.net/evandeng2009/article/details/131390484
+   
+   https://blog.csdn.net/u014706251/article/details/129542347
+   
+4.fatal: unable to access 'https://github.com/201707231/wxk-person-Repo.git/': Empty reply from server
+
+   配置ssh方法访问
+   
+   避免使用https访问经常网络连接失败或者需要输入密码的问题
+   
+   详见 文件 ”Github配置ssh key的步骤,pdf“
+   
+5.Git Fatal:The remote end hung up unexpectedly
+
+   问题描述：Git在推送项目时报错：fatal: The remote end hung up unexpectedly。
+
+   问题原因：推送的文件太大。
+   
+   解决方法：
+
+   1.修改设置git config文件的postBuffer的大小。（设置为500MB）
+   
+   $ git config --local http.postBuffer 524288000
+   
+   注：--local选项指定这个设置只对当前仓库生效。
+
+   2.或者直接修改本地仓库的.config文件。
+   ①打开项目所在的目录（仓库所在目录）
+
+   ②设置显示隐藏文件
+   
+       找到目录下的.git文件夹
+   
+   ③编辑config文件（.git文件夹下的）
+   
+   增加下图所示的两行内容
+
+   [http]
+    postBuffer = 524288000（添加在最末尾就行）
+	
+	
+	
+	
+	Github配置ssh key  原理解释
+通俗解释！！
+重点来了：一定要知道ssh key的配置是针对每台主机的！，比如我在某台主机上操作git和我的远程仓库，想要push时不输入账号密码，走ssh协议，就需要配置ssh key，放上去的key是当前主机的ssh公钥。那么如果我换了一台其他主机，想要实现无密登录，也就需要重新配置。
+
+下面解释开头提出的问题：
+（1）为什么要配？
+配了才能实现push代码的时候不需要反复输入自己的github账号密码，更方便
+（2）每使用一台主机都要配？
+是的，每使用一台新主机进行git远程操作，想要实现无密，都需要配置。并不是说每个账号配一次就够了，而是每一台主机都需要配。
+（3）配了为啥就不用密码了？
+因为配置的时候是把当前主机的公钥放到了你的github账号下，相当于当前主机和你的账号做了一个关联，你在这台主机上已经登录了你的账号，此时此刻github认为是该账号主人在操作这台主机，在配置ssh后就信任该主机了。所以下次在使用git的时候即使没有登录github，也能直接从本地push代码到远程了。当然这里不要混淆了，你不能随意push你的代码到任何仓库，你只能push到你自己的仓库或者其他你有权限的仓库！
+
