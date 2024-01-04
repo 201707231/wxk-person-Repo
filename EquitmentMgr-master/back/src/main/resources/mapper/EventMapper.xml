@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.EventDao">
+    <select id="listEvent" resultType="com.alibaba.fastjson.JSONObject">
+        select 
+            e.eventID,
+            e.eventTime,
+            e.eventStageID,
+            stage.defName as eventStage,
+            e.eventTypeID,
+            type.defName as eventType,
+            e.eventDetail,
+            e.eventNote
+         from (
+        <if test="devID != null or partID != null">
+            select eTmp.* from(
+                 select eventID from eventRela
+            <where>
+                <if test="devID != null">
+                    AND devID=#{devID}
+                </if>
+                <if test="partID != null">
+                    AND partID=#{partID}
+                </if>
+            </where>
+            ) er left join (
+        </if>
+            select * from event
+        <where>
+            <if test="eventStageID != null">
+              AND eventStageID=#{eventStageID}
+            </if>
+            <if test="eventTypeID != null">
+              AND eventTypeID=#{eventTypeID}
+            </if>
+            <if test="eventBeginTime !=null">
+                AND eventTime between #{eventBeginTime}
+                <choose>
+                    <when test="eventEndTime !=null">
+                        AND #{eventEndTime}
+                    </when>
+                    <otherwise>
+                        AND '2099-12-31 23:59:59'
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="keyWord != null and keyWord !='' ">
+                        AND MATCH(eventDetail,eventNote) AGAINST(#{keyWord})
+            </if>
+        </where>
+        <choose>
+            <when test="devID != null || partID !=null ">
+                ) eTmp on eTmp.eventID=er.eventID
+             order by eTmp.eventTime   
+                limit #{offSet},#{pageRow}
+            )       e
+            </when>
+            <otherwise>
+                order by eventTime
+                limit #{offSet} ,#{pageRow}
+                ) e
+            </otherwise>
+        </choose>
+
+            inner join defs stage on stage.defID=e.eventStageID
+            inner join defs type on type.defID=e.eventTypeID
+    </select>
+    <insert id="addEvent">
+          replace into event
+            (eventID,eventStageID,eventTypeID,eventDetail,eventNote,eventTime,lastUpdateTime)
+            values
+            (#{eventID},#{eventStageID},#{eventTypeID},#{eventDetail},#{eventNote},#{eventTime},now())
+    </insert>
+    <insert id="addEventRela" >
+          replace into eventRela
+            (eventID,devID,partID)
+            values
+            (#{eventID},#{devID,jdbcType=VARCHAR},#{partID,jdbcType=VARCHAR})
+    </insert>
+</mapper>

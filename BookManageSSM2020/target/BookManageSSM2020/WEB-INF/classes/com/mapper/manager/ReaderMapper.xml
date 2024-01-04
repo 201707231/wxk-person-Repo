@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.manager.ReaderDao">
+    <select id="findAllReaders" resultType="Reader" parameterType="map" >
+        SELECT * FROM reader limit #{begin},#{pageRows}
+    </select>
+    <select id="findReadersTotalCount" resultType="Integer">
+        SELECT COUNT(*) FROM reader
+    </select>
+    <insert id="addReader" parameterType="Reader">
+        INSERT INTO reader VALUES (#{id},#{name},#{sex},#{age},#{telephone},#{email},#{password},#{start},#{end},#{punishcount},#{lendcount})
+    </insert>
+    <delete id="deleteReaderById" parameterType="String">
+        DELETE FROM reader WHERE id =#{id}
+    </delete>
+    <update id="updateReader" parameterType="Reader">
+        UPDATE reader SET name=#{name},sex=#{sex},age=#{age},telephone=#{telephone},email=#{email},password=#{password} WHERE id=#{id}
+    </update>
+    <select id="findReaderById" resultType="Reader" parameterType="String">
+        SELECT * FROM reader WHERE id=#{id}
+    </select>
+    <select id="findReadersByTag" resultType="Reader" parameterType="String">
+        SELECT * FROM reader b where b.name like concat('%', #{name} ,'%')
+    </select>
+    <update id="updateLendCount" parameterType="String">
+        UPDATE reader SET lendcount=lendcount+1 WHERE id=#{id}
+    </update>
+</mapper>

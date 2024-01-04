@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.manager.BorrowDao">
+    <select id="findAllBorrow" resultType="Borrow" parameterType="map">
+        SELECT * FROM borrow limit #{begin},#{pageRows}
+    </select>
+    <select id="findBorrowsTotalCount" resultType="Integer">
+        SELECT COUNT(*) FROM borrow
+    </select>
+<!--    <resultMap id="borrow" type="Borrow">-->
+<!--        <id column="isbn" property="isbn"/>-->
+<!--        <result column="press" property="press"/>-->
+<!--        <result column="name" property="name"/>-->
+<!--        <result column="author" property="author"/>-->
+<!--        <result column="num" property="num"/>-->
+<!--        <result column="introduction" property="introduction"/>-->
+<!--        <result column="ctime" property="ctime"/>-->
+<!--        <collection property="type" ofType="Type">-->
+<!--            <id column="tid" property="tid"/>-->
+<!--            <result column="tname" property="tname"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    <select id="findAllBooks" resultMap="book">-->
+<!--        SELECT  b.isbn,b.name,b.press,b.author,b.num,b.introduction,b.ctime,t.tname-->
+<!--        FROM book b,type t-->
+<!--        WHERE b.tid=t.tid-->
+<!--    </select>-->
+    <insert id="addBorrow" parameterType="Borrow">
+        INSERT INTO borrow VALUES (#{bid},#{rid},#{mid},#{borrowtime},#{returntime},#{renewtimes},#{state},#{practicaltime},null)
+    </insert>
+<!--    <delete id="deleteBookById" parameterType="String">-->
+<!--        DELETE FROM book WHERE isbn =#{isbn}-->
+<!--    </delete>-->
+    <update id="updateBorrow" parameterType="Borrow">
+        UPDATE borrow SET bid=#{bid},rid=#{rid},mid=#{mid},borrowtime=#{borrowtime},
+        returntime=#{returntime},renewtimes=#{renewtimes},state=#{state}, practicaltime=#{practicaltime}
+        WHERE id=#{id}
+    </update>
+    <select id="findBorrowByKey" resultType="Borrow" parameterType="Integer">
+        SELECT * FROM borrow WHERE id=#{id}
+    </select>
+    <update id="returnBorrow" parameterType="Borrow">
+        UPDATE borrow SET
+        state=#{state}, practicaltime=#{practicaltime}
+        WHERE id=#{id}
+    </update>
+    <select id="findBookId" resultType="Integer" parameterType="Integer">
+        SELECT bid FROM borrow WHERE id=#{id}
+    </select>
+    <update id="renewBorrow" parameterType="Borrow">
+        UPDATE borrow SET
+        renewtimes=renewtimes+1, returntime=#{returntime}
+        WHERE id=#{id}
+    </update>
+    <select id="findReturnTime" resultType="String" parameterType="Integer">
+        SELECT returntime FROM borrow WHERE id=#{id}
+    </select>
+    <select id="findBorrowByTag" resultType="Borrow" parameterType="String">
+        SELECT * FROM borrow where rid like concat('%', #{rid} ,'%')
+    </select>
+</mapper>

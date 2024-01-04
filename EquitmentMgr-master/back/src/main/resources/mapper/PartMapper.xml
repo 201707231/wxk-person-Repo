@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.PartDao">
+    <select id="countPart" resultType="Integer">
+        select count(1) from part
+    </select>
+    <select id="listPart" resultType="com.alibaba.fastjson.JSONObject">
+        select  partID        ,
+                partTypeID   ,
+                type.defName as partType     ,
+                partStatusID ,
+                status.defName as partStatus ,
+                createTime
+            from (select * from part 
+                    order by partID
+                    limit #{offSet} ,#{pageRow} 
+            ) p
+            left join defs type on type.defID = p.partTypeID 
+            left join defs status on status.defID=p.partStatusID
+    </select>
+    <update id="updatePart" parameterType="com.alibaba.fastjson.JSONObject">
+        update part 
+        set partStatusID=#{partStatusID} , 
+            partTypeID=#{partTypeID},
+            lastUpdateTime=now()
+        where partID=#{partID}
+    </update>
+    <insert id="addPart" >
+        replace into part
+            (partID,partTypeID,partStatusID,createTime,lastUpdateTime)
+            values
+            (#{partID},#{partTypeID},#{partStatusID},now(),now())
+    </insert>
+    <select id="queryPart" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+            select  partID        ,
+                partTypeID   ,
+                type.defName as partType     ,
+                partStatusID ,
+                status.defName as partStatus ,
+                createTime
+            from (
+                select * from part
+        <where>
+            <if test="_parameter.containsKey(partTypeID) and (partTypeID != null)">
+                partTypeID = #{partTypeID}
+            </if>
+            <if test="_parameter.containsKey(partStatusID) and (partStatusID != null)">
+                partStatusID = #{partStatusID}
+            </if>
+        </where>
+                order by partID
+            ) p
+            left join defs type on type.defID = p.partTypeID 
+            left join defs status on status.defID=p.partStatusID
+    </select>
+</mapper>

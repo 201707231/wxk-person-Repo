@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+     <typeAliases>
+         <typeAlias type="com.entity.Manager" alias="Manager"></typeAlias>
+         <typeAlias type="com.entity.Type" alias="Type"></typeAlias>
+         <typeAlias type="com.entity.Book" alias="Book"></typeAlias>
+         <typeAlias type="com.entity.Reader" alias="Reader"></typeAlias>
+         <typeAlias type="com.entity.Borrow" alias="Borrow"></typeAlias>
+     </typeAliases>
+    <mappers>
+        <mapper resource="com/mapper/manager/ManagerMapper.xml"/>
+        <mapper resource="com/mapper/manager/TypeMapper.xml"/>
+        <mapper resource="com/mapper/manager/BookMapper.xml"/>
+        <mapper resource="com/mapper/manager/ReaderMapper.xml"/>
+        <mapper resource="com/mapper/manager/BorrowMapper.xml"/>
+    </mappers>
+</configuration>

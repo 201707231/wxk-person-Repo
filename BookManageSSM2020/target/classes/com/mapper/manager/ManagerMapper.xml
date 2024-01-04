@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.manager.ManagerDao">
+    <select id="findManagerCount" resultType="Integer" parameterType="Manager">
+        SELECT  COUNT(*) FROM manager WHERE name=#{name} AND password =#{password}
+    </select>
+    <select id="findManager" resultType="Manager" parameterType="Manager">
+        SELECT  * FROM manager WHERE name=#{name} AND password =#{password}
+    </select>
+    <update id="updatePass" parameterType="Manager">
+        UPDATE manager SET
+        password=#{password}
+        WHERE id=#{id}
+    </update>
+    <update id="updateManager" parameterType="Manager">
+        UPDATE manager SET
+        name =#{name},age=#{age},sex=#{sex},telephone=#{telephone}
+        WHERE id=#{id}
+    </update>
+    <select id="findManagerById" resultType="Manager" parameterType="Integer">
+        SELECT  * FROM manager WHERE id=#{id}
+    </select>
+</mapper>

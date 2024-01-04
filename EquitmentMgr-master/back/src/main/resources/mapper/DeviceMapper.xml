@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.DeviceDao">
+    <select id="countDev" resultType="Integer">
+        select count(1) from device
+    </select>
+
+    <select id="listDevice" resultType="com.alibaba.fastjson.JSONObject">
+        select  devID        ,
+                devTypeID   ,
+                type.defName as devType     ,
+                devStatusID ,
+                status.defName as devStatus ,
+                createTime
+            from (select * from device 
+                    order by devID
+                    limit #{offSet} ,#{pageRow} 
+            ) d
+            left join defs type on type.defID = d.devTypeID 
+            left join defs status on status.defID=d.devStatusID
+    </select>
+    <update id="updateDevice" parameterType="com.alibaba.fastjson.JSONObject">
+        update device 
+        set devStatusID=#{devStatusID} , 
+            devTypeID=#{devTypeID}
+        where devID=#{devID}
+    </update>
+    <insert id="addDevice" >
+        replace into device
+            (devID,devTypeID,devStatusID,createTime,lastUpdateTime)
+            values
+            (#{devID},#{devTypeID},#{devStatusID},now(),now())
+    </insert>
+    <select id="listDevParts" resultType="com.alibaba.fastjson.JSONObject">
+        select  p.partID,
+                p.partTypeID,
+                pt.defName as partType,
+                p.partStatusID,
+                ps.defName as partStatus,
+                partBatchNum,
+                partNote,
+                createTime
+            from 
+                (   
+                    select devID,partID from devParts 
+                        where devID=#{devID}
+                )  dp
+            left join  part p on  p.partID=dp.partID
+            left join defs pt on  pt.defID=p.partTypeID
+            left join defs ps on  ps.defID=p.partStatusID
+            order by p.partID
+    </select>
+
+    <select id="queryDevice" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+          select  devID        ,
+                devTypeID   ,
+                type.defName as devType     ,
+                devStatusID ,
+                status.defName as devStatus ,
+                createTime
+            from (  
+                select * from device 
+                <where>
+                    <if test="_parameter.containsKey(devTypeID) and (devTypeID != null)">
+                        devTypeID = #{devTypeID}
+                    </if>
+                    <if test="_parameter.containsKey(devStatusID) and (devStatusID != null)">
+                        devStatusID = #{devStatusID}
+                    </if>
+                </where>
+                order by devID
+            ) d
+            left join defs type on type.defID = d.devTypeID 
+            left join defs status on status.defID=d.devStatusID
+    </select>
+
+</mapper>

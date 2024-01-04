@@ -1,0 +1,41 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "firefox2",
+            "url": "http://localhost:9520",
+            "webRoot": "${workspaceFolder}/src",
+            "pathMappings": [{ "url": "webpack:///src/", "path": "${webRoot}/" }]
+          }
+          ,
+
+        {
+            "type": "firefox",
+            "request": "launch",  
+            "name": "vue:firefox",  // 此项配置的名字，显示在调试页的配置选择下拉框中。
+            "url": "http://localhost:9520",  // chrome 自动启动时打开的网址(开发环境启动的本地调试入口)。
+            "webRoot": "${workspaceFolder}",  // 静态文件所在的本机目录(一般是项目根目录)。
+            "sourceMaps": true      
+          },
+
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch MyApplication",
+            "request": "launch",
+            "mainClass": "com.heeexy.example.MyApplication",
+            "projectName": "example"
+        }
+    ]
+}

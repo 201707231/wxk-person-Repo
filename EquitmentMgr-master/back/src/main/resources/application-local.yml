@@ -1,0 +1,12 @@
+spring:
+  profiles: local
+  datasource:
+      url: jdbc:mysql://localhost:3306/example?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: 15864316738wxk
+logging:
+  config: classpath:logback-local.xml
+
+mybatis:
+configuration:
+log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

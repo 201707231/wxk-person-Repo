@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.DefsDao">
+  <select id="listDefs" resultType="com.alibaba.fastjson.JSONObject">
+        select defID,defType,defName
+            from defs
+    </select>
+  <select id="queryDefs" resultType="com.alibaba.fastjson.JSONObject">
+        select defID,defType,defName
+            from defs
+    <where>
+      <if test="defTypeID !=null">
+                AND defType= #{defTypeID}
+            </if>
+      <if test="defName !=null">
+                AND defName like '%#{defName}%'
+            </if>
+    </where>
+  </select>
+  <select id="count" resultType="Integer">
+          select count(1) as count from defs
+    <where>
+      <if test="defID != null">
+                AND defID=#{defID}
+            </if>
+      <if test="defTypeID != null">
+                AND defType=#{defType}
+            </if>
+    </where>
+  </select>
+  <insert id="addDef">
+         insert into defs
+         values(#{defID},#{defType},#{defName})
+    </insert>
+
+    <select id="maxOf" resultType="Integer">
+          select MAX(defID) from defs
+          where defType=#{defType}
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.manager.TypeDao">
+    <select id="findAllBooksType" resultType="Type">
+        SELECT  * FROM type
+    </select>
+    <insert id="addType" parameterType="Type">
+        INSERT INTO type VALUES (null,#{tname})
+    </insert>
+    <delete id="deleteTypeById" parameterType="Integer">
+        DELETE FROM type WHERE tid =#{tid}
+    </delete>
+    <update id="updateType" parameterType="Type">
+        UPDATE type SET tname=#{tname} WHERE tid=#{tid}
+    </update>
+    <select id="findTypeById" resultType="Type" parameterType="Integer">
+        SELECT * FROM type WHERE tid=#{tid}
+    </select>
+</mapper>
